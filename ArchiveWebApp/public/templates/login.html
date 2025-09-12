@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Archivage Électronique</title>
+    <!-- Inclure la police Inter depuis Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Inclure Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-slate-900 text-gray-800 p-4">
+
+    <!-- Conteneur principal de la carte de connexion -->
+    <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-sm sm:max-w-md mx-auto">
+        <!-- En-tête de la carte -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">
+                <span class="text-lime-500">RPI-PAD</span> <span class="text-sky-400">Archiv'Web</span>
+            </h1>
+            <p class="text-gray-500 text-lg">
+                Connectez-vous à votre espace
+            </p>
+        </div>
+
+        <!-- Formulaire de connexion -->
+        <form id="loginForm" action="#" method="POST" class="space-y-6">
+            <!-- Champ E-mail -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Adresse E-mail</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <!-- Icône E-mail (SVG) -->
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                        </svg>
+                    </div>
+                    <input id="email" name="email" type="email" autocomplete="email" required
+                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-sky-400 transition"
+                        placeholder="Entrez votre adresse e-mail">
+                </div>
+            </div>
+
+            <!-- Champ Mot de passe -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <!-- Icône mot de passe (SVG) -->
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required
+                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-sky-400 transition"
+                        placeholder="••••••••">
+                </div>
+            </div>
+
+            <!-- Bouton de connexion -->
+            <div>
+                <button type="submit"
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-semibold text-white bg-lime-500 hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500 transition-colors">
+                    Se connecter
+                </button>
+            </div>
+        </form>
+
+        <!-- Espace pour les messages -->
+        <div id="message" class="mt-4 text-center text-sm font-medium"></div>
+
+        <!-- Lien mot de passe oublié -->
+        <div class="mt-6 text-center">
+            <a href="#" class="font-medium text-sky-400 hover:text-sky-500 transition-colors">
+                Mot de passe oublié ?
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            // Empêche l'envoi du formulaire par défaut
+            event.preventDefault();
+
+            // Récupère les valeurs des champs
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+
+            // Nettoie les messages précédents
+            messageDiv.textContent = '';
+            messageDiv.className = 'mt-4 text-center text-sm font-medium';
+
+            // Effectue la requête POST vers le fichier login.php
+            // Assurez-vous que le fichier login.php est dans le même répertoire
+            // et que l'application est exécutée sur un serveur web local.
+            fetch('login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Stocke le rôle de l'utilisateur pour une utilisation future
+                    sessionStorage.setItem('userRole', data.role);
+                    messageDiv.textContent = 'Connexion réussie ! Redirection...';
+                    messageDiv.classList.add('text-green-600');
+                    // Redirection vers la nouvelle page d'accueil
+                    window.location.href = 'index.html'; // Corrigé le nom de fichier
+                } else {
+                    messageDiv.textContent = data.message;
+                    messageDiv.classList.add('text-red-600');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                messageDiv.textContent = 'Une erreur s\'est produite. Veuillez réessayer.';
+                messageDiv.classList.add('text-red-600');
+            });
+        });
+    </script>
+</body>
+</html>

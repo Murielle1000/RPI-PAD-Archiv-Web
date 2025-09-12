@@ -1,0 +1,15 @@
+RewriteEngine On
+
+#Global
+
+RewriteRule ^admin$ admin.php
+RewriteRule ^home$ index.php
+
+#----------view--------- 
+#documents
+RewriteRule ^listedocuments$ view/pages/admin/documents/liste.php
+RewriteRule ^corbeilledocuments$ view/pages/admin/documents/corbeille.php
+
+#users
+RewriteRule ^listeusers$ view/pages/admin/users/liste.php
+RewriteRule ^corbeilleusers$ view/pages/admin/users/corbeille.php

@@ -1,0 +1,538 @@
+/* 
+ * RPI-PAD Archiv'Web - Thème personnalisé harmonisé
+ * Palette de couleurs cohérente pour l'ensemble du projet
+ */
+
+:root {
+    /* Palette principale RPI-PAD - Bleus */
+    --rpi-primary: #2563eb;
+    --rpi-primary-light: #60a5fa;
+    --rpi-primary-lighter: #eff6ff;
+    --rpi-primary-dark: #1e3a8a;
+    --rpi-secondary: #3b82f6;
+    
+    /* Couleurs d'accent diversifiées */
+    --rpi-accent: #6f42c1;        
+    --rpi-accent-2: #dc2626;      
+    --rpi-accent-3: #059669;      
+    --rpi-accent-4: #ea580c;      
+    --rpi-accent-5: #7c3aed;      
+    --rpi-accent-6: #0891b2;      
+    --rpi-accent-7: #be185d;      
+    --rpi-accent-8: #65a30d;      
+    
+    /* Couleurs de statut enrichies */
+    --rpi-success: #10b981;       
+    --rpi-success-light: #34d399;
+    --rpi-info: #06b6d4;          
+    --rpi-info-light: #22d3ee;
+    --rpi-warning: #f59e0b;       
+    --rpi-warning-light: #fbbf24;
+    --rpi-danger: #ef4444;        
+    --rpi-danger-light: #f87171;
+    
+    /* Couleurs neutres */
+    --rpi-light: #f8fafc;
+    --rpi-light-2: #f1f5f9;
+    --rpi-dark: #1e293b;
+    --rpi-dark-2: #334155;
+    --rpi-gray: #64748b;
+    --rpi-gray-light: #94a3b8;
+    
+    /* Couleurs de texte */
+    --rpi-text-primary: #0f172a;
+    --rpi-text-secondary: #475569;
+    --rpi-text-muted: #64748b;
+    --rpi-text-light: #ffffff;
+    
+    /* Dégradés diversifiés */
+    --rpi-gradient-primary: linear-gradient(135deg, var(--rpi-primary) 0%, var(--rpi-primary-light) 100%);
+    --rpi-gradient-success: linear-gradient(135deg, var(--rpi-success) 0%, var(--rpi-success-light) 100%);
+    --rpi-gradient-info: linear-gradient(135deg, var(--rpi-info) 0%, var(--rpi-info-light) 100%);
+    --rpi-gradient-warning: linear-gradient(135deg, var(--rpi-warning) 0%, var(--rpi-warning-light) 100%);
+    --rpi-gradient-danger: linear-gradient(135deg, var(--rpi-danger) 0%, var(--rpi-danger-light) 100%);
+    --rpi-gradient-accent: linear-gradient(135deg, var(--rpi-accent) 0%, var(--rpi-accent-5) 100%);
+    --rpi-gradient-card: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    --rpi-gradient-rainbow: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+}
+
+/* Classes utilitaires pour les couleurs principales */
+.bg-rpi-primary { background-color: var(--rpi-primary) !important; }
+.bg-rpi-primary-light { background-color: var(--rpi-primary-light) !important; }
+.bg-rpi-primary-lighter { background-color: var(--rpi-primary-lighter) !important; }
+.bg-rpi-primary-dark { background-color: var(--rpi-primary-dark) !important; }
+.bg-rpi-secondary { background-color: var(--rpi-secondary) !important; }
+
+/* Classes utilitaires pour les couleurs d'accent */
+.bg-rpi-accent { background-color: var(--rpi-accent) !important; }
+.bg-rpi-accent-2 { background-color: var(--rpi-accent-2) !important; }
+.bg-rpi-accent-3 { background-color: var(--rpi-accent-3) !important; }
+.bg-rpi-accent-4 { background-color: var(--rpi-accent-4) !important; }
+.bg-rpi-accent-5 { background-color: var(--rpi-accent-5) !important; }
+.bg-rpi-accent-6 { background-color: var(--rpi-accent-6) !important; }
+.bg-rpi-accent-7 { background-color: var(--rpi-accent-7) !important; }
+.bg-rpi-accent-8 { background-color: var(--rpi-accent-8) !important; }
+
+/* Classes utilitaires pour les couleurs de statut */
+.bg-rpi-success { background-color: var(--rpi-success) !important; }
+.bg-rpi-success-light { background-color: var(--rpi-success-light) !important; }
+.bg-rpi-info { background-color: var(--rpi-info) !important; }
+.bg-rpi-info-light { background-color: var(--rpi-info-light) !important; }
+.bg-rpi-warning { background-color: var(--rpi-warning) !important; }
+.bg-rpi-warning-light { background-color: var(--rpi-warning-light) !important; }
+.bg-rpi-danger { background-color: var(--rpi-danger) !important; }
+.bg-rpi-danger-light { background-color: var(--rpi-danger-light) !important; }
+
+/* Classes de texte */
+.text-rpi-primary { color: var(--rpi-primary) !important; }
+.text-rpi-primary-light { color: var(--rpi-primary-light) !important; }
+.text-rpi-primary-dark { color: var(--rpi-primary-dark) !important; }
+.text-rpi-secondary { color: var(--rpi-secondary) !important; }
+.text-rpi-accent { color: var(--rpi-accent) !important; }
+.text-rpi-accent-2 { color: var(--rpi-accent-2) !important; }
+.text-rpi-accent-3 { color: var(--rpi-accent-3) !important; }
+.text-rpi-accent-4 { color: var(--rpi-accent-4) !important; }
+.text-rpi-accent-5 { color: var(--rpi-accent-5) !important; }
+.text-rpi-accent-6 { color: var(--rpi-accent-6) !important; }
+.text-rpi-accent-7 { color: var(--rpi-accent-7) !important; }
+.text-rpi-accent-8 { color: var(--rpi-accent-8) !important; }
+
+/* Classes de bordures */
+.border-rpi-primary { border-color: var(--rpi-primary) !important; }
+.border-rpi-secondary { border-color: var(--rpi-secondary) !important; }
+.border-rpi-accent { border-color: var(--rpi-accent) !important; }
+.border-rpi-success { border-color: var(--rpi-success) !important; }
+.border-rpi-info { border-color: var(--rpi-info) !important; }
+.border-rpi-warning { border-color: var(--rpi-warning) !important; }
+.border-rpi-danger { border-color: var(--rpi-danger) !important; }
+
+/* Dégradés */
+.bg-rpi-gradient { background: var(--rpi-gradient-primary) !important; }
+.bg-rpi-gradient-success { background: var(--rpi-gradient-success) !important; }
+.bg-rpi-gradient-info { background: var(--rpi-gradient-info) !important; }
+.bg-rpi-gradient-warning { background: var(--rpi-gradient-warning) !important; }
+.bg-rpi-gradient-danger { background: var(--rpi-gradient-danger) !important; }
+.bg-rpi-gradient-accent { background: var(--rpi-gradient-accent) !important; }
+.bg-rpi-gradient-card { background: var(--rpi-gradient-card) !important; }
+.bg-rpi-gradient-rainbow { background: var(--rpi-gradient-rainbow) !important; }
+
+/* Cartes avec le thème RPI */
+.card-rpi {
+    border: none;
+    background: var(--rpi-gradient-primary);
+    color: var(--rpi-text-light);
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(37, 99, 235, 0.15);
+}
+
+.card-rpi .card-header {
+    background: var(--rpi-primary-dark);
+    color: var(--rpi-text-light);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-rpi .card-body {
+    background: var(--rpi-primary);
+}
+
+/* Tableaux avec le thème RPI */
+.table-rpi {
+    background: var(--rpi-primary-lighter);
+    color: var(--rpi-text-primary);
+}
+
+.table-rpi thead {
+    background: var(--rpi-secondary);
+    color: var(--rpi-text-light);
+}
+
+.table-rpi tbody tr:hover {
+    background-color: rgba(37, 99, 235, 0.05);
+}
+
+/* Formulaires avec le thème RPI */
+.form-control-rpi {
+    background: var(--rpi-primary-lighter);
+    color: var(--rpi-text-primary);
+    border: 1px solid var(--rpi-primary-light);
+}
+
+.form-control-rpi:focus {
+    background: var(--rpi-primary-lighter);
+    color: var(--rpi-text-primary);
+    border-color: var(--rpi-primary);
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+}
+
+.form-control-rpi-dark {
+    background: var(--rpi-secondary);
+    color: var(--rpi-text-light);
+    border: none;
+}
+
+.form-control-rpi-dark:focus {
+    background: var(--rpi-secondary);
+    color: var(--rpi-text-light);
+    border-color: var(--rpi-primary-light);
+    box-shadow: 0 0 0 0.2rem rgba(96, 165, 250, 0.25);
+}
+
+/* Boutons avec le thème RPI */
+.btn-rpi-primary {
+    background: var(--rpi-primary);
+    border-color: var(--rpi-primary);
+    color: var(--rpi-text-light);
+}
+
+.btn-rpi-primary:hover {
+    background: var(--rpi-primary-dark);
+    border-color: var(--rpi-primary-dark);
+    color: var(--rpi-text-light);
+}
+
+.btn-rpi-secondary {
+    background: var(--rpi-secondary);
+    border-color: var(--rpi-secondary);
+    color: var(--rpi-text-light);
+}
+
+.btn-rpi-secondary:hover {
+    background: var(--rpi-primary);
+    border-color: var(--rpi-primary);
+    color: var(--rpi-text-light);
+}
+
+.btn-rpi-outline {
+    background: transparent;
+    border-color: var(--rpi-primary);
+    color: var(--rpi-primary);
+}
+
+.btn-rpi-outline:hover {
+    background: var(--rpi-primary);
+    border-color: var(--rpi-primary);
+    color: var(--rpi-text-light);
+}
+
+/* Badges avec le thème RPI */
+.badge-rpi-primary {
+    background-color: var(--rpi-primary);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-secondary {
+    background-color: var(--rpi-secondary);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-success {
+    background-color: var(--rpi-success);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-info {
+    background-color: var(--rpi-info);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-warning {
+    background-color: var(--rpi-warning);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-danger {
+    background-color: var(--rpi-danger);
+    color: var(--rpi-text-light);
+}
+
+/* Badges d'accent */
+.badge-rpi-accent {
+    background-color: var(--rpi-accent);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-accent-2 {
+    background-color: var(--rpi-accent-2);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-accent-3 {
+    background-color: var(--rpi-accent-3);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-accent-4 {
+    background-color: var(--rpi-accent-4);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-accent-5 {
+    background-color: var(--rpi-accent-5);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-accent-6 {
+    background-color: var(--rpi-accent-6);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-accent-7 {
+    background-color: var(--rpi-accent-7);
+    color: var(--rpi-text-light);
+}
+
+.badge-rpi-accent-8 {
+    background-color: var(--rpi-accent-8);
+    color: var(--rpi-text-light);
+}
+
+/* Pagination avec le thème RPI */
+.pagination-rpi .page-link {
+    color: var(--rpi-primary);
+    border-color: var(--rpi-primary-light);
+}
+
+.pagination-rpi .page-link:hover {
+    color: var(--rpi-primary-dark);
+    background-color: var(--rpi-primary-lighter);
+    border-color: var(--rpi-primary);
+}
+
+.pagination-rpi .page-item.active .page-link {
+    background-color: var(--rpi-primary);
+    border-color: var(--rpi-primary);
+    color: var(--rpi-text-light);
+}
+
+/* Sidebar avec le thème RPI */
+.sidebar-rpi {
+    background: var(--rpi-gradient-primary);
+}
+
+.sidebar-rpi .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.sidebar-rpi .nav-link:hover {
+    color: var(--rpi-text-light);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-rpi .nav-link.active {
+    color: var(--rpi-text-light);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Topbar avec le thème RPI */
+.topbar-rpi {
+    background: var(--rpi-text-light);
+    border-bottom: 1px solid var(--rpi-primary-light);
+}
+
+/* Cartes de statistiques avec le thème RPI */
+.stat-card-rpi {
+    border-left: 4px solid var(--rpi-primary);
+    background: var(--rpi-text-light);
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(37, 99, 235, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.stat-card-rpi:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 2rem 0 rgba(37, 99, 235, 0.15);
+}
+
+.stat-card-rpi .stat-icon {
+    color: var(--rpi-primary);
+}
+
+.stat-card-rpi .stat-number {
+    color: var(--rpi-text-primary);
+    font-weight: 700;
+}
+
+.stat-card-rpi .stat-label {
+    color: var(--rpi-text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Variantes de couleurs pour les cartes de statistiques */
+.stat-card-rpi.border-left-primary { border-left-color: var(--rpi-primary) !important; }
+.stat-card-rpi.border-left-secondary { border-left-color: var(--rpi-secondary) !important; }
+.stat-card-rpi.border-left-success { border-left-color: var(--rpi-success) !important; }
+.stat-card-rpi.border-left-info { border-left-color: var(--rpi-info) !important; }
+.stat-card-rpi.border-left-warning { border-left-color: var(--rpi-warning) !important; }
+.stat-card-rpi.border-left-danger { border-left-color: var(--rpi-danger) !important; }
+.stat-card-rpi.border-left-accent { border-left-color: var(--rpi-accent) !important; }
+.stat-card-rpi.border-left-accent-2 { border-left-color: var(--rpi-accent-2) !important; }
+.stat-card-rpi.border-left-accent-3 { border-left-color: var(--rpi-accent-3) !important; }
+.stat-card-rpi.border-left-accent-4 { border-left-color: var(--rpi-accent-4) !important; }
+.stat-card-rpi.border-left-accent-5 { border-left-color: var(--rpi-accent-5) !important; }
+.stat-card-rpi.border-left-accent-6 { border-left-color: var(--rpi-accent-6) !important; }
+.stat-card-rpi.border-left-accent-7 { border-left-color: var(--rpi-accent-7) !important; }
+.stat-card-rpi.border-left-accent-8 { border-left-color: var(--rpi-accent-8) !important; }
+
+/* Icônes colorées pour les cartes */
+.stat-card-rpi .stat-icon.primary { color: var(--rpi-primary) !important; }
+.stat-card-rpi .stat-icon.secondary { color: var(--rpi-secondary) !important; }
+.stat-card-rpi .stat-icon.success { color: var(--rpi-success) !important; }
+.stat-card-rpi .stat-icon.info { color: var(--rpi-info) !important; }
+.stat-card-rpi .stat-icon.warning { color: var(--rpi-warning) !important; }
+.stat-card-rpi .stat-icon.danger { color: var(--rpi-danger) !important; }
+.stat-card-rpi .stat-icon.accent { color: var(--rpi-accent) !important; }
+.stat-card-rpi .stat-icon.accent-2 { color: var(--rpi-accent-2) !important; }
+.stat-card-rpi .stat-icon.accent-3 { color: var(--rpi-accent-3) !important; }
+.stat-card-rpi .stat-icon.accent-4 { color: var(--rpi-accent-4) !important; }
+.stat-card-rpi .stat-icon.accent-5 { color: var(--rpi-accent-5) !important; }
+.stat-card-rpi .stat-icon.accent-6 { color: var(--rpi-accent-6) !important; }
+.stat-card-rpi .stat-icon.accent-7 { color: var(--rpi-accent-7) !important; }
+.stat-card-rpi .stat-icon.accent-8 { color: var(--rpi-accent-8) !important; }
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-rpi {
+        margin-bottom: 1rem;
+    }
+    
+    .stat-card-rpi {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Override Bootstrap pour harmoniser */
+.btn-primary {
+    background-color: var(--rpi-primary);
+    border-color: var(--rpi-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--rpi-primary-dark);
+    border-color: var(--rpi-primary-dark);
+}
+
+.text-primary {
+    color: var(--rpi-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--rpi-primary) !important;
+}
+
+.border-primary {
+    border-color: var(--rpi-primary) !important;
+}
+
+/* Styles pour les alertes avec couleurs harmonisées */
+.alert-success {
+    background-color: var(--rpi-success);
+    border-color: var(--rpi-success);
+    color: var(--rpi-text-light);
+}
+
+.alert-info {
+    background-color: var(--rpi-info);
+    border-color: var(--rpi-info);
+    color: var(--rpi-text-light);
+}
+
+.alert-warning {
+    background-color: var(--rpi-warning);
+    border-color: var(--rpi-warning);
+    color: var(--rpi-text-light);
+}
+
+.alert-danger {
+    background-color: var(--rpi-danger);
+    border-color: var(--rpi-danger);
+    color: var(--rpi-text-light);
+}
+
+/* Styles pour les boutons avec couleurs variées */
+.btn-success {
+    background-color: var(--rpi-success);
+    border-color: var(--rpi-success);
+}
+
+.btn-success:hover {
+    background-color: var(--rpi-success-light);
+    border-color: var(--rpi-success-light);
+}
+
+.btn-info {
+    background-color: var(--rpi-info);
+    border-color: var(--rpi-info);
+}
+
+.btn-info:hover {
+    background-color: var(--rpi-info-light);
+    border-color: var(--rpi-info-light);
+}
+
+.btn-warning {
+    background-color: var(--rpi-warning);
+    border-color: var(--rpi-warning);
+}
+
+.btn-warning:hover {
+    background-color: var(--rpi-warning-light);
+    border-color: var(--rpi-warning-light);
+}
+
+.btn-danger {
+    background-color: var(--rpi-danger);
+    border-color: var(--rpi-danger);
+}
+
+.btn-danger:hover {
+    background-color: var(--rpi-danger-light);
+    border-color: var(--rpi-danger-light);
+}
+
+/* Styles pour les cartes avec dégradés variés */
+.card-gradient-primary {
+    background: var(--rpi-gradient-primary) !important;
+    color: var(--rpi-text-light) !important;
+}
+
+.card-gradient-success {
+    background: var(--rpi-gradient-success) !important;
+    color: var(--rpi-text-light) !important;
+}
+
+.card-gradient-info {
+    background: var(--rpi-gradient-info) !important;
+    color: var(--rpi-text-light) !important;
+}
+
+.card-gradient-warning {
+    background: var(--rpi-gradient-warning) !important;
+    color: var(--rpi-text-light) !important;
+}
+
+.card-gradient-danger {
+    background: var(--rpi-gradient-danger) !important;
+    color: var(--rpi-text-light) !important;
+}
+
+.card-gradient-accent {
+    background: var(--rpi-gradient-accent) !important;
+    color: var(--rpi-text-light) !important;
+}
