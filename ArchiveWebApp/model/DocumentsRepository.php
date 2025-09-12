@@ -16,12 +16,12 @@
 
         // Méthodes pour gérer les documents (ajouter, supprimer, modifier, récupérer, etc.)
 
-        // récupérer la liste des documents
+        // récupérer la liste des documents (excluant les supprimés)
         public function getAll() :array
         {
             $documents = [];
             if ($this->pdo) {
-                $sql = "SELECT * FROM documents";
+                $sql = "SELECT * FROM documents WHERE is_deleted = 0";
                 try {
                     $stmt = $this->pdo->query($sql);
                     $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -33,12 +33,12 @@
             return $documents;
         }
 
-        // Récupérer les documents selon le type
+        // Récupérer les documents selon le type (excluant les supprimés)
         public function getByType(string $type): array
         {
             $documents = [];
             if ($this->pdo) {
-                $sql = "SELECT * FROM documents WHERE type = :type";
+                $sql = "SELECT * FROM documents WHERE type = :type AND is_deleted = 0";
                 try {
                     $stmt = $this->pdo->prepare($sql);
                     $stmt->execute(['type' => $type]);
@@ -49,6 +49,7 @@
             }
             return $documents;
         }
+
 
         // Récupérer les documents selon la catégorie
         public function getByCategorie(string $categorie): array
@@ -124,7 +125,26 @@
     
     
     
-        public function deleteDocument(int $id): bool
+        // Soft delete - marquer comme supprimé
+        public function deleteDocument(int $id, int $deleteBy = null): bool
+        {
+            if ($this->pdo) {
+                $sql = "UPDATE documents SET is_deleted = 1, deleted_at = NOW(), delete_by = :delete_by WHERE id = :id";
+                try {
+                    $stmt = $this->pdo->prepare($sql);
+                    return $stmt->execute([
+                        'id' => $id,
+                        'delete_by' => $deleteBy
+                    ]);
+                } catch (PDOException $error) {
+                    error_log("Erreur lors de la suppression : " . $error->getMessage());
+                }
+            }
+            return false;
+        }
+
+        // Suppression définitive (pour la corbeille)
+        public function permanentDeleteDocument(int $id): bool
         {
             if ($this->pdo) {
                 $sql = "DELETE FROM documents WHERE id = :id";
@@ -132,10 +152,45 @@
                     $stmt = $this->pdo->prepare($sql);
                     return $stmt->execute(['id' => $id]);
                 } catch (PDOException $error) {
-                    error_log("Erreur lors de la suppression : " . $error->getMessage());
+                    error_log("Erreur lors de la suppression définitive : " . $error->getMessage());
                 }
             }
             return false;
+        }
+
+        // Restaurer un document supprimé
+        public function restoreDocument(int $id): bool
+        {
+            if ($this->pdo) {
+                $sql = "UPDATE documents SET is_deleted = 0, deleted_at = NULL, delete_by = NULL WHERE id = :id";
+                try {
+                    $stmt = $this->pdo->prepare($sql);
+                    return $stmt->execute(['id' => $id]);
+                } catch (PDOException $error) {
+                    error_log("Erreur lors de la restauration : " . $error->getMessage());
+                }
+            }
+            return false;
+        }
+
+        // Récupérer les documents supprimés (pour la corbeille)
+        public function getDeletedDocuments(): array
+        {
+            $documents = [];
+            if ($this->pdo) {
+                $sql = "SELECT d.*, u.nom as deleted_by_name, u.prenom as deleted_by_prenom 
+                        FROM documents d 
+                        LEFT JOIN users u ON d.delete_by = u.id 
+                        WHERE d.is_deleted = 1 
+                        ORDER BY d.deleted_at DESC";
+                try {
+                    $stmt = $this->pdo->query($sql);
+                    $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } catch (PDOException $error) {
+                    error_log("Erreur lors de la récupération des documents supprimés : " . $error->getMessage());
+                }
+            }
+            return $documents;
         }
     
     
@@ -163,7 +218,7 @@
         public function getById(int $id)
         {
             if ($this->pdo) {
-                $sql = "SELECT * FROM documents WHERE id = :id";
+                $sql = "SELECT * FROM documents WHERE id = :id AND is_deleted = 0";
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute(['id' => $id]);
                 return $stmt->fetch(PDO::FETCH_ASSOC);

@@ -35,8 +35,6 @@ class AuditHelper
      */
     private function getCurrentUserId()
     {
-        // Ici, vous devrez adapter selon votre système de session
-        // Pour l'instant, on retourne 1 (admin par défaut)
         return $_SESSION['user_id'] ?? 1;
     }
 
@@ -186,6 +184,36 @@ class AuditHelper
             $documentId,
             null,
             "Consultation du document '$documentTitle' (Type: $documentType)",
+            $this->getClientIP()
+        );
+    }
+
+    /**
+     * Enregistre la restauration d'un document
+     */
+    public function logDocumentRestore($userId, $documentId, $documentTitle, $documentType)
+    {
+        return $this->auditRepo->logAction(
+            $userId,
+            'RESTAURATION_DOCUMENT',
+            $documentId,
+            null,
+            "Restauration du document '$documentTitle' (Type: $documentType)",
+            $this->getClientIP()
+        );
+    }
+
+    /**
+     * Enregistre la suppression définitive d'un document
+     */
+    public function logDocumentPermanentDelete($userId, $documentId, $documentTitle, $documentType)
+    {
+        return $this->auditRepo->logAction(
+            $userId,
+            'SUPPRESSION_DÉFINITIVE_DOCUMENT',
+            $documentId,
+            null,
+            "Suppression définitive du document '$documentTitle' (Type: $documentType)",
             $this->getClientIP()
         );
     }

@@ -10,7 +10,7 @@
         // Récupérer les informations du document avant suppression pour l'audit
         $document = $repo->getById($id);
         
-        $success = $repo->deleteDocument($id);
+        $success = $repo->deleteDocument($id, $_SESSION['user_id'] ?? 1);
 
         if ($success) {
             // Enregistrer l'action dans l'audit

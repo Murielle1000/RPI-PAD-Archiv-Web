@@ -96,9 +96,29 @@ if ($_SESSION['role'] !== 'admin') {
                         $logs = $auditRepo->getFilteredAuditLogs($filters, $perPage, ($page - 1) * $perPage);
                         $total = $auditRepo->countAuditLogs($filters);
                         $pages = ceil($total / $perPage);
+                        
+                        // Debug temporaire pour vérifier le filtrage
+                        if (isset($_GET['debug']) && $_GET['debug'] === '1') {
+                            echo "<div class='alert alert-info'>";
+                            echo "<strong>Debug - Filtres appliqués:</strong><br>";
+                            echo "Recherche: " . ($search ?: 'Aucune') . "<br>";
+                            echo "Action: " . ($actionFilter ?: 'Aucune') . "<br>";
+                            echo "Utilisateur: " . ($userFilter ?: 'Aucun') . "<br>";
+                            echo "Date début: " . ($dateFrom ?: 'Aucune') . "<br>";
+                            echo "Date fin: " . ($dateTo ?: 'Aucune') . "<br>";
+                            echo "Total résultats: " . $total . "<br>";
+                            
+                            // Debug: vérifier les actions d'utilisateurs
+                            $userActions = $auditRepo->getFilteredAuditLogs(['action' => 'AJOUT_UTILISATEUR'], 10, 0);
+                            echo "<br><strong>Actions d'ajout d'utilisateurs récentes:</strong><br>";
+                            foreach ($userActions as $action) {
+                                echo "- " . $action['action'] . " par utilisateur " . $action['user_id'] . " le " . $action['timestamp'] . "<br>";
+                            }
+                            echo "</div>";
+                        }
 
                         // Récupération des utilisateurs pour le filtre
-                        require_once("model/UsersRepository.php");
+                        require_once("model/UtilisateursRepository.php");
                         $usersRepo = new UsersRepository();
                         $users = $usersRepo->getAllUsers();
 
@@ -203,6 +223,10 @@ if ($_SESSION['role'] !== 'admin') {
                                         <option value="MODIFICATION_UTILISATEUR" <?= $actionFilter=='MODIFICATION_UTILISATEUR'?'selected':''; ?>>Modifications d'utilisateurs</option>
                                         <option value="SUPPRESSION_UTILISATEUR" <?= $actionFilter=='SUPPRESSION_UTILISATEUR'?'selected':''; ?>>Suppressions d'utilisateurs</option>
                                         <option value="CHANGEMENT_STATUT_UTILISATEUR" <?= $actionFilter=='CHANGEMENT_STATUT_UTILISATEUR'?'selected':''; ?>>Changements de statut</option>
+                                    </optgroup>
+                                    <optgroup label="Corbeille">
+                                        <option value="RESTAURATION_DOCUMENT" <?= $actionFilter=='RESTAURATION_DOCUMENT'?'selected':''; ?>>Restaurations de documents</option>
+                                        <option value="SUPPRESSION_DÉFINITIVE_DOCUMENT" <?= $actionFilter=='SUPPRESSION_DÉFINITIVE_DOCUMENT'?'selected':''; ?>>Suppressions définitives</option>
                                     </optgroup>
                                 </select>
                                 <select name="user" class="form-control form-control-rpi-dark mr-2" onchange="document.getElementById('filterForm').submit();">
@@ -315,7 +339,7 @@ if ($_SESSION['role'] !== 'admin') {
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; </span>
+                        <span>© 2025 RPI-PAD Archiv'Web</span>
                     </div>
                 </div>
             </footer>
@@ -395,6 +419,10 @@ function getActionBadgeClass($action) {
             return 'info';
         case 'CHANGEMENT_STATUT_UTILISATEUR':
             return 'accent-6';
+        case 'RESTAURATION_DOCUMENT':
+            return 'success';
+        case 'SUPPRESSION_DÉFINITIVE_DOCUMENT':
+            return 'danger';
         default:
             return 'secondary';
     }
@@ -411,7 +439,9 @@ function formatAction($action) {
         'MODIFICATION_UTILISATEUR' => 'Modification Utilisateur',
         'SUPPRESSION_UTILISATEUR' => 'Suppression Utilisateur',
         'CHANGEMENT_STATUT_UTILISATEUR' => 'Changement Statut',
-        'CONSULTATION_DOCUMENT' => 'Consultation Document'
+        'CONSULTATION_DOCUMENT' => 'Consultation Document',
+        'RESTAURATION_DOCUMENT' => 'Restauration Document',
+        'SUPPRESSION_DÉFINITIVE_DOCUMENT' => 'Suppression Définitive'
     ];
     
     return $actions[$action] ?? $action;

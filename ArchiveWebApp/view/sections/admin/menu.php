@@ -151,6 +151,36 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-folder-open"></i>
+                    <span>Autres</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="autre.php">Tous les autres documents</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Gestion
+            </div>
+
+            <!-- Corbeille - Visible uniquement pour les administrateurs -->
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+            <li class="nav-item">
+                <a class="nav-link" href="corbeille.php">
+                    <i class="fas fa-fw fa-trash"></i>
+                    <span>Corbeille</span></a>
+            </li>
+            <?php endif; ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -179,7 +209,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                     </a>
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="users.php">Tous les utilisateurs</a>
+                            <a class="collapse-item" href="utilisateurs.php">Tous les utilisateurs</a>
                         </div>
                     </div>
                 </li>

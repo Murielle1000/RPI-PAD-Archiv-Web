@@ -45,9 +45,9 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">LOIS</h1>
+                    <h1 class="h3 mb-2 text-gray-800">AUTRES DOCUMENTS</h1>
                         <div class="d-sm-flex align-items-center justify-content-space-between mb-4" >
-                            <a class="btn btn-sm btn-dark fw-bold" href="#modalAddDecret" data-toggle="modal" data-target="#modalAddDecret" style="margin-left: 0px">
+                            <a class="btn btn-sm btn-dark fw-bold" href="#modalAddAutre" data-toggle="modal" data-target="#modalAddAutre" style="margin-left: 0px">
                                 <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Ajouter
                             </a>
@@ -65,26 +65,27 @@
                         $page = max(1, intval($_GET['page'] ?? 1));
                         $perPage = 10;
 
-                        // Récupération des lois
-                        $lois = $repo->getByType('lois');
+                        // Récupération des autres documents (tous les types sauf les types prédéfinis)
+                        $typesPredefinis = ['lois', 'décrets', 'arrêtés', 'ordonnance', 'note de service', 'décision', 'résolution', 'convention'];
+                        $autresDocuments = $repo->getByType('autre');
 
                         // Recherche par titre
                         if ($search !== '') {
-                            $lois = array_filter($lois, function($doc) use ($search) {
+                            $autresDocuments = array_filter($autresDocuments, function($doc) use ($search) {
                                 return stripos($doc['titre'], $search) !== false;
                             });
                         }
 
                         // Filtre catégorie
                         if ($categorieFilter) {
-                            $lois = array_filter($lois, function($doc) use ($categorieFilter) {
+                            $autresDocuments = array_filter($autresDocuments, function($doc) use ($categorieFilter) {
                                 return $doc['categorie'] === $categorieFilter;
                             });
                         }
 
                         // Tri alphabétique
                         if ($alphaOrder) {
-                            usort($lois, function($a, $b) use ($alphaOrder) {
+                            usort($autresDocuments, function($a, $b) use ($alphaOrder) {
                                 if ($alphaOrder === 'asc') {
                                     return strcmp($a['titre'], $b['titre']);
                                 } else {
@@ -95,7 +96,7 @@
 
                         // Tri chronologique
                         if ($dateOrder) {
-                            usort($lois, function($a, $b) use ($dateOrder) {
+                            usort($autresDocuments, function($a, $b) use ($dateOrder) {
                                 if ($dateOrder === 'asc') {
                                     return strtotime($a['add_date']) - strtotime($b['add_date']);
                                 } else {
@@ -105,16 +106,16 @@
                         }
 
                         // Pagination
-                        $total = count($lois);
+                        $total = count($autresDocuments);
                         $pages = ceil($total / $perPage);
-                        $lois = array_slice($lois, ($page - 1) * $perPage, $perPage);
+                        $autresDocuments = array_slice($autresDocuments, ($page - 1) * $perPage, $perPage);
                     ?>
 
                     <?php
                     // Variables pour le template
-                    $pageTitle = "Liste des Lois";
-                    $documentType = "lois";
-                    $documents = $lois;
+                    $pageTitle = "Liste des Autres Documents";
+                    $documentType = "autre";
+                    $documents = $autresDocuments;
                     $currentPage = $page;
                     include "view/sections/admin/document-card-template.php";
                     ?>
@@ -132,19 +133,19 @@
             <!-- End of Main Content -->
 
 
-            <!-- Modal add LOIS -->
-            <div class="modal fade" id="modalAddLois" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <!-- Modal add AUTRE -->
+            <div class="modal fade" id="modalAddAutre" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog modal-lg" role="document" >
                     <div class="modal-content">
                         
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Ajouter un Texte</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Ajouter un Autre Document</h5>
                             <button class="close" type="button" data-dismiss="modal" aria-label="Fermer">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         
-                        <form action="controller/addLois.php" method="POST" enctype="multipart/form-data" id="formAddDocument">
+                        <form action="controller/addAutre.php" method="POST" enctype="multipart/form-data" id="formAddDocument">
                             <div class="modal-body">
                                 
                                 <!-- Titre -->
@@ -153,20 +154,11 @@
                                     <input type="text" class="form-control" id="docTitle" name="title" placeholder="Titre du document" required>
                                 </div>
 
-                                <!-- Type -->
+                                <!-- Type personnalisé -->
                                 <div class="form-group">
                                     <label for="docType">Type </label>
-                                    <select class="form-control" id="docType" name="type" required>
-                                        <option value="">-- Sélectionnez un type --</option>
-                                        <option value="décrets">Décrets</option>
-                                        <option value="lois">Lois</option>
-                                        <option value="arrêtés">Arrêtés</option>
-                                        <option value="ordonnance">Ordonnance</option>
-                                        <option value="note de service">Note de service</option>
-                                        <option value="décision">Décision</option>
-                                        <option value="résolution">Résolution</option>
-                                        <option value="convention">Convention</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="docType" name="type" placeholder="Saisissez le type de document" required>
+                                    <small class="form-text text-muted">Ex: Rapport, Manuel, Guide, Procédure, etc.</small>
                                 </div>
 
                                 <!-- Catégorie -->
@@ -178,6 +170,7 @@
                                         <option value="ministériel">Ministère</option>
                                         <option value="gouvernement">Gouvernement</option>
                                         <option value="Direction Générale">Direction Générale</option>
+                                        <option value="autre">Autre</option>
                                     </select>
                                 </div>
 

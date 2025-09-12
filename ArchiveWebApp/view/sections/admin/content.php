@@ -12,7 +12,7 @@
                     <?php if (session_status() === PHP_SESSION_NONE) session_start();
                         $nom = isset($_SESSION['nom']) ? $_SESSION['nom'] : (isset($_SESSION['user_id']) ? '' : '');
                         if (!$nom && isset($_SESSION['user_id'])) {
-                            require_once __DIR__ . '/../../../model/UsersRepository.php';
+                            require_once __DIR__ . '/../../../model/UtilisateursRepository.php';
                             $repo = new UsersRepository();
                             $u = $repo->getUserById($_SESSION['user_id']);
                             $nom = $u ? $u['nom'] : '';
@@ -63,8 +63,9 @@
                     $notes = count($docRepo->getByType('note de service'));
                     $resolutions = count($docRepo->getByType('résolution'));
                     $conventions = count($docRepo->getByType('convention'));
+                    $autres = count($docRepo->getByType('autre'));
                     // Total des documents
-                    $total = $lois + $decrets + $arretes + $ordonnances + $decisions + $notes + $resolutions + $conventions;
+                    $total = $lois + $decrets + $arretes + $ordonnances + $decisions + $notes + $resolutions + $conventions + $autres;
                     ?>
 
                     <!-- Content Row -->
@@ -154,6 +155,24 @@
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-handshake fa-2x stat-icon accent-5"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Autres Documents Card -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card-rpi border-left-secondary h-100 py-2 fade-in-up" style="animation-delay: 0.9s;">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="stat-label">
+                                                Autres</div>
+                                            <div class="stat-number"><?= $autres ?></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-folder-open fa-2x stat-icon secondary"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -289,7 +308,12 @@
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <a href="users.php" class="btn btn-rpi-primary btn-block">
+                                            <a href="autre.php" class="btn btn-secondary btn-block">
+                                                <i class="fas fa-folder-open mr-2"></i>Gérer les Autres
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <a href="utilisateurs.php" class="btn btn-rpi-primary btn-block">
                                                 <i class="fas fa-users mr-2"></i>Gérer les Utilisateurs
                                             </a>
                                         </div>
@@ -307,7 +331,7 @@
                                 <div class="card-body">
                                     <div class="text-center">
                                         <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 15rem;"
-                                            src="public/images/logo_app.jpg" alt="RPI-PAD Logo">
+                                            src="public/images/logo.jpg" alt="RPI-PAD Logo">
                                     </div>
                                     <p class="text-center"><strong>RPI-PAD Archiv'Web</strong></p>
                                     <p class="text-center text-muted">Système d'Archivage Électronique</p>
@@ -318,7 +342,7 @@
                                             <small class="text-muted">Documents</small>
                                         </div>
                                         <div class="col-6">
-                                            <div class="h5 mb-0 font-weight-bold text-success">8</div>
+                                            <div class="h5 mb-0 font-weight-bold text-success">9</div>
                                             <small class="text-muted">Types</small>
                                         </div>
                                     </div>

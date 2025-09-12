@@ -1,6 +1,6 @@
 <?php
-
-require_once __DIR__ . '/../model/UsersRepository.php';
+session_start();
+require_once __DIR__ . '/../model/UtilisateursRepository.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $id = $_GET['id'] ?? '';
@@ -8,13 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Validation des données
     if (empty($id) || empty($statut)) {
-        header('Location: ../users.php?error=missing_parameters');
+        header('Location: ../utilisateurs.php?error=missing_parameters');
         exit;
     }
 
     // Validation du statut
     if (!in_array($statut, ['actif', 'bloque'])) {
-        header('Location: ../users.php?error=invalid_status');
+        header('Location: ../utilisateurs.php?error=invalid_status');
         exit;
     }
 
@@ -25,18 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Enregistrer l'action dans l'audit
             require_once 'AuditHelper.php';
             $auditHelper = new AuditHelper();
-            $auditHelper->logUserStatusChange(1, $id, 'Utilisateur', $statut); // 1 = admin par défaut
+            $auditHelper->logUserStatusChange($_SESSION['user_id'] ?? 1, $id, 'Utilisateur', $statut);
             
             $message = $statut === 'actif' ? 'user_unblocked' : 'user_blocked';
-            header('Location: ../users.php?success=' . $message);
+            header('Location: ../utilisateurs.php?success=' . $message);
         } else {
-            header('Location: ../users.php?error=status_update_failed');
+            header('Location: ../utilisateurs.php?error=status_update_failed');
         }
     } catch (Exception $e) {
         error_log("Erreur lors du changement de statut de l'utilisateur: " . $e->getMessage());
-        header('Location: ../users.php?error=database_error');
+        header('Location: ../utilisateurs.php?error=database_error');
     }
 } else {
-    header('Location: ../users.php');
+    header('Location: ../utilisateurs.php');
 }
 ?>

@@ -14,12 +14,12 @@ class UsersRepository
     }
 
     /**
-     * Récupère tous les utilisateurs
+     * Récupère tous les utilisateurs actifs
      */
     public function getAllUsers()
     {
         try {
-            $sql = "SELECT id, nom, prenom, email, role, statut, add_date FROM users ORDER BY add_date DESC";
+            $sql = "SELECT id, nom, prenom, email, role, statut, add_date FROM users WHERE statut = 'actif' ORDER BY add_date DESC";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -85,9 +85,25 @@ class UsersRepository
     }
 
     /**
-     * Supprime un utilisateur
+     * Supprime un utilisateur (soft delete - marque comme supprimé)
      */
     public function deleteUser($id)
+    {
+        try {
+            $sql = "UPDATE users SET statut = 'supprimé', delete_at = NOW() WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la suppression de l'utilisateur: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Suppression définitive d'un utilisateur (pour la corbeille)
+     */
+    public function permanentDeleteUser($id)
     {
         try {
             $sql = "DELETE FROM users WHERE id = :id";
@@ -95,8 +111,40 @@ class UsersRepository
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Erreur lors de la suppression de l'utilisateur: " . $e->getMessage());
+            error_log("Erreur lors de la suppression définitive de l'utilisateur: " . $e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * Restaure un utilisateur supprimé
+     */
+    public function restoreUser($id)
+    {
+        try {
+            $sql = "UPDATE users SET statut = 'actif', delete_at = NULL WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la restauration de l'utilisateur: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Récupère les utilisateurs supprimés
+     */
+    public function getDeletedUsers()
+    {
+        try {
+            $sql = "SELECT id, nom, prenom, email, role, statut, add_date, delete_at FROM users WHERE statut = 'supprimé' ORDER BY delete_at DESC";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la récupération des utilisateurs supprimés: " . $e->getMessage());
+            return [];
         }
     }
 

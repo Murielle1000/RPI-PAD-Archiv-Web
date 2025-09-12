@@ -24,7 +24,7 @@ echo "Initialisation des logs d'audit...\n";
 
 // Vérifier si l'utilisateur ID 1 existe, sinon utiliser l'ID 2
 $userId = 1;
-require_once 'model/UsersRepository.php';
+require_once 'model/UtilisateursRepository.php';
 $usersRepo = new UsersRepository();
 $user = $usersRepo->getUserById($userId);
 if (!$user) {

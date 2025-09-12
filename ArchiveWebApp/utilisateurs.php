@@ -114,6 +114,18 @@ if ($_SESSION['role'] !== 'admin') {
                                         echo '<br><small>Détails: ' . htmlspecialchars($_GET['debug']) . '</small>';
                                     }
                                     break;
+                                case 'missing_id':
+                                    echo 'ID utilisateur manquant !';
+                                    break;
+                                case 'user_not_found':
+                                    echo 'Utilisateur non trouvé !';
+                                    break;
+                                case 'cannot_delete_self':
+                                    echo 'Vous ne pouvez pas supprimer votre propre compte !';
+                                    break;
+                                case 'access_denied':
+                                    echo 'Accès refusé ! Cette action nécessite des droits administrateur.';
+                                    break;
                                 default:
                                     echo 'Une erreur est survenue !';
                             }
@@ -125,7 +137,7 @@ if ($_SESSION['role'] !== 'admin') {
                      <?php endif; ?>
 
                     <?php
-                        require_once("controller/UsersController.php");
+                        require_once("controller/UtilisateursController.php");
                         $controller = new UsersController();
                         $data = $controller->index();
                         $users = $data['users'];
@@ -208,17 +220,23 @@ if ($_SESSION['role'] !== 'admin') {
                                                             <i class="fas fa-edit"></i> 
                                                         </a>
                                                         <?php if ($user['statut'] == 'actif'): ?>
-                                                            <a href="controller/toggleUserStatus.php?id=<?= $user['id'] ?>&statut=bloque" class="btn btn-sm btn-secondary" onclick="return confirm('Bloquer cet utilisateur ?');">
+                                                            <a href="controller/toggleUtilisateurStatus.php?id=<?= $user['id'] ?>&statut=bloque" class="btn btn-sm btn-secondary" onclick="return confirm('Bloquer cet utilisateur ?');">
                                                                 <i class="fas fa-ban"></i> 
                                                             </a>
                                                         <?php else: ?>
-                                                            <a href="controller/toggleUserStatus.php?id=<?= $user['id'] ?>&statut=actif" class="btn btn-sm btn-success" onclick="return confirm('Débloquer cet utilisateur ?');">
+                                                            <a href="controller/toggleUtilisateurStatus.php?id=<?= $user['id'] ?>&statut=actif" class="btn btn-sm btn-success" onclick="return confirm('Débloquer cet utilisateur ?');">
                                                                 <i class="fas fa-check"></i> 
                                                             </a>
                                                         <?php endif; ?>
-                                                        <a href="controller/deleteUser.php?id=<?= $user['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cet utilisateur ? Cette action est irréversible.');">
-                                                            <i class="fas fa-trash"></i> 
-                                                        </a>
+                                                        <?php if ($user['id'] != $_SESSION['user_id']): ?>
+                                                            <a href="controller/deleteUtilisateur.php?id=<?= $user['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cet utilisateur ? Cette action est irréversible.');">
+                                                                <i class="fas fa-trash"></i> 
+                                                            </a>
+                                                        <?php else: ?>
+                                                            <button class="btn btn-sm btn-secondary" disabled title="Vous ne pouvez pas supprimer votre propre compte">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        <?php endif; ?>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -306,7 +324,7 @@ if ($_SESSION['role'] !== 'admin') {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="controller/updateUser.php" method="POST">
+                        <form action="controller/updateUtilisateur.php" method="POST">
                             <div class="modal-body">
                                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                 
@@ -361,7 +379,7 @@ if ($_SESSION['role'] !== 'admin') {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="controller/addUser.php" method="POST" id="formAddUser">
+                        <form action="controller/addUtilisateur.php" method="POST" id="formAddUser">
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="nom">Nom</label>
@@ -405,7 +423,7 @@ if ($_SESSION['role'] !== 'admin') {
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; </span>
+                        <span>© 2025 RPI-PAD Archiv'Web</span>
                     </div>
                 </div>
             </footer>

@@ -1,6 +1,6 @@
 <?php
-
-require_once __DIR__ . '/../model/UsersRepository.php';
+session_start();
+require_once __DIR__ . '/../model/UtilisateursRepository.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'] ?? '';
@@ -12,13 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validation des données
     if (empty($id) || empty($nom) || empty($prenom) || empty($email)) {
-        header('Location: ../users.php?error=missing_fields');
+        header('Location: ../utilisateurs.php?error=missing_fields');
         exit;
     }
 
     // Validation de l'email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        header('Location: ../users.php?error=invalid_email');
+        header('Location: ../utilisateurs.php?error=invalid_email');
         exit;
     }
 
@@ -29,17 +29,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Enregistrer l'action dans l'audit
             require_once 'AuditHelper.php';
             $auditHelper = new AuditHelper();
-            $auditHelper->logUserEdit(1, $id, $email); // 1 = admin par défaut
+            $auditHelper->logUserEdit($_SESSION['user_id'] ?? 1, $id, $email);
             
-            header('Location: ../users.php?success=user_updated');
+            header('Location: ../utilisateurs.php?success=user_updated');
         } else {
-            header('Location: ../users.php?error=update_failed');
+            header('Location: ../utilisateurs.php?error=update_failed');
         }
     } catch (Exception $e) {
         error_log("Erreur lors de la mise à jour de l'utilisateur: " . $e->getMessage());
-        header('Location: ../users.php?error=database_error');
+        header('Location: ../utilisateurs.php?error=database_error');
     }
 } else {
-    header('Location: ../users.php');
+    header('Location: ../utilisateurs.php');
 }
 ?>

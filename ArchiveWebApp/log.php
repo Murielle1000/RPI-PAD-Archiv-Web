@@ -47,8 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['status' => 'error', 'message' => 'Votre compte a été bloqué. Contactez l\'administrateur.']);
         } else {
         // Vérifie si le mot de passe fourni correspond à celui de la base de données.
-        // NOTE: Pour une sécurité accrue, vous devriez hacher les mots de passe et utiliser password_verify().
-        if ($password === $user['password']) {
+        if(password_verify($password, $user['password'])) {
             // Enregistrer la connexion dans l'audit
             require_once 'controller/AuditHelper.php';
             $auditHelper = new AuditHelper();

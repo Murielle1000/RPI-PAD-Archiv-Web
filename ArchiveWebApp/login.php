@@ -40,6 +40,14 @@
 
         <!-- Espace pour les messages -->
         <div id="message" class="mt-4 text-center text-sm font-medium"></div>
+        
+        <!-- Message d'erreur d'accès refusé -->
+        <?php if (isset($_GET['error']) && $_GET['error'] === 'access_denied'): ?>
+            <div class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Accès refusé :</strong> Cette fonctionnalité est réservée aux administrateurs.
+            </div>
+        <?php endif; ?>
 
         <!-- Lien mot de passe oublié -->
         <div class="mt-6 text-center">

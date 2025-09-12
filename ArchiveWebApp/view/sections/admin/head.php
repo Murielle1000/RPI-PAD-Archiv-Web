@@ -35,7 +35,62 @@
     <!-- RPI-PAD Custom Theme -->
     <link href="public/css/custom-theme.css" rel="stylesheet">
 
-
-
+    <!-- Custom CSS for Fixed Sidebar -->
+    <style>
+        .sidebar {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            height: 100vh !important;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar .nav-link {
+            padding: 1rem;
+        }
+        
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Ajuster le contenu principal pour compenser la sidebar fixe */
+        #content-wrapper {
+            margin-left: 224px !important;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -225px;
+            }
+            
+            .sidebar.toggled {
+                margin-left: 0;
+            }
+            
+            #content-wrapper {
+                margin-left: 0 !important;
+            }
+        }
+        
+        /* Améliorer l'apparence de la sidebar */
+        .sidebar-brand {
+            padding: 1.5rem 1rem;
+        }
+        
+        .sidebar-divider {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .sidebar-heading {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 0 1rem;
+            margin-top: 1rem;
+        }
+    </style>
 
 </head>

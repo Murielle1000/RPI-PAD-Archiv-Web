@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../model/UsersRepository.php';
+require_once __DIR__ . '/../model/UtilisateursRepository.php';
 
 class UsersController
 {

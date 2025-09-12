@@ -4,7 +4,7 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
-require_once 'model/UsersRepository.php';
+require_once 'model/UtilisateursRepository.php';
 require_once 'model/AuditRepository.php';
 $usersRepo = new UsersRepository();
 $auditRepo = new AuditRepository();
@@ -79,7 +79,7 @@ $logs = $auditRepo->getFilteredAuditLogs(['user_id' => $_SESSION['user_id']], 50
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; </span>
+                        <span>© 2025 RPI-PAD Archiv'Web</span>
                 </div>
             </div>
         </footer>
