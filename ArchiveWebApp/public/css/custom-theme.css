@@ -536,3 +536,41 @@
     background: var(--rpi-gradient-accent) !important;
     color: var(--rpi-text-light) !important;
 }
+
+/* ========== MASQUER LA SCROLLBAR ========== */
+/* Masquer la scrollbar pour tous les navigateurs */
+* {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+*::-webkit-scrollbar {
+    display: none; /* WebKit (Chrome, Safari, Edge) */
+}
+
+/* Alternative pour maintenir la fonctionnalité de scroll */
+body, html {
+    overflow-x: hidden;
+}
+
+/* Masquer spécifiquement la scrollbar de la sidebar */
+.sidebar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none; /* WebKit */
+}
+
+/* Masquer la scrollbar des modales et autres éléments */
+.modal-body, .table-responsive, .card-body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.modal-body::-webkit-scrollbar, 
+.table-responsive::-webkit-scrollbar, 
+.card-body::-webkit-scrollbar {
+    display: none; /* WebKit */
+}

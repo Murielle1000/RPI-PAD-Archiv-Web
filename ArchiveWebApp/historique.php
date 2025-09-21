@@ -245,8 +245,8 @@ if ($_SESSION['role'] !== 'admin') {
                                 <a href="historique.php" class="btn btn-rpi-secondary">
                                     <i class="fas fa-times"></i> Effacer
                                 </a>
-                                <button type="button" class="btn btn-rpi-success" onclick="exportHistory()">
-                                    <i class="fas fa-download"></i> Exporter
+                                <button type="button" class="btn btn-rpi-success" onclick="exportHistoryPDF()">
+                                    <i class="fas fa-file-pdf"></i> Exporter PDF
                                 </button>
                             </form>
                         </div>
@@ -353,41 +353,187 @@ if ($_SESSION['role'] !== 'admin') {
     <!-- Bootstrap core JavaScript-->
     <?php require_once("view/sections/admin/script.php"); ?> 
 
+    <!-- Inclure jsPDF pour la génération de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
     <script>
-    function exportHistory() {
-        // Créer un tableau CSV avec les données actuelles
-        let csvContent = "Date/Heure,Utilisateur,Email,Rôle,Action,Document/Utilisateur Ciblé,Détails,IP\n";
+    function exportHistoryPDF() {
+        // Créer un nouveau document PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('l', 'mm', 'a4'); // Orientation paysage
         
-        // Récupérer les données du tableau
-        const table = document.querySelector('.table tbody');
-        const rows = table.querySelectorAll('tr');
-        
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            if (cells.length >= 6) {
-                const date = cells[0].textContent.trim();
-                const user = cells[1].querySelector('strong').textContent.trim();
-                const email = cells[1].querySelector('.text-muted').textContent.trim();
-                const role = cells[1].querySelector('.badge').textContent.trim();
-                const action = cells[2].textContent.trim();
-                const target = cells[3].querySelector('strong') ? cells[3].querySelector('strong').textContent.trim() : '-';
-                const details = cells[4].textContent.trim();
-                const ip = cells[5].textContent.trim();
+        // Fonction pour ajouter les logos
+        function addLogos() {
+            return new Promise((resolve) => {
+                let logosLoaded = 0;
+                const totalLogos = 2;
                 
-                csvContent += `"${date}","${user}","${email}","${role}","${action}","${target}","${details}","${ip}"\n`;
-            }
+                function checkComplete() {
+                    logosLoaded++;
+                    if (logosLoaded === totalLogos) {
+                        resolve();
+                    }
+                }
+                
+                // Logo de l'entreprise (RPI)
+                const imgRPI = new Image();
+                imgRPI.crossOrigin = 'anonymous';
+                imgRPI.onload = function() {
+                    try {
+                        doc.addImage(imgRPI, 'JPEG', 14, 5, 20, 15);
+                    } catch (e) {
+                        console.log('Erreur lors de l\'ajout du logo RPI:', e);
+                    }
+                    checkComplete();
+                };
+                imgRPI.onerror = function() {
+                    console.log('Impossible de charger le logo RPI');
+                    checkComplete();
+                };
+                imgRPI.src = 'public/images/RPI.jpg';
+                
+                // Logo de l'application
+                const imgApp = new Image();
+                imgApp.crossOrigin = 'anonymous';
+                imgApp.onload = function() {
+                    try {
+                        doc.addImage(imgApp, 'JPEG', doc.internal.pageSize.width - 34, 5, 20, 15);
+                    } catch (e) {
+                        console.log('Erreur lors de l\'ajout du logo app:', e);
+                    }
+                    checkComplete();
+                };
+                imgApp.onerror = function() {
+                    console.log('Impossible de charger le logo app');
+                    checkComplete();
+                };
+                imgApp.src = 'public/images/logo.jpg';
+            });
+        }
+        
+        // Ajouter les logos et continuer
+        addLogos().then(() => {
+            // Titre du document (centré)
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            const titleWidth = doc.getTextWidth('HISTORIQUE DES ACTIONS');
+            const pageWidth = doc.internal.pageSize.width;
+            doc.text('HISTORIQUE DES ACTIONS', (pageWidth - titleWidth) / 2, 25);
+            
+            // Date de génération
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text('Généré le: ' + new Date().toLocaleDateString('fr-FR'), 14, 35);
+            
+            // Ligne de séparation
+            doc.setLineWidth(0.5);
+            doc.line(14, 40, pageWidth - 14, 40);
+            
+            generateTable();
         });
         
-        // Télécharger le fichier CSV
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', 'historique_actions_' + new Date().toISOString().split('T')[0] + '.csv');
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        function generateTable() {
+            // Récupérer les données du tableau
+            const table = document.querySelector('.table tbody');
+            const rows = table.querySelectorAll('tr');
+            
+            // Préparer les données pour le tableau PDF
+            const tableData = [];
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 6) {
+                    const date = cells[0].textContent.trim();
+                    const user = cells[1].querySelector('strong') ? cells[1].querySelector('strong').textContent.trim() : '';
+                    const email = cells[1].querySelector('.text-muted') ? cells[1].querySelector('.text-muted').textContent.trim() : '';
+                    const role = cells[1].querySelector('.badge') ? cells[1].querySelector('.badge').textContent.trim() : '';
+                    const action = cells[2].textContent.trim();
+                    const target = cells[3].querySelector('strong') ? cells[3].querySelector('strong').textContent.trim() : '-';
+                    const details = cells[4].textContent.trim();
+                    const ip = cells[5].textContent.trim();
+                    
+                    // Filtrer les détails pour exclure les chemins d'accès
+                    let filteredDetails = details;
+                    if (details.includes('uploads/') || details.includes('\\')) {
+                        // Remplacer les chemins par "Fichier joint"
+                        filteredDetails = details.replace(/.*uploads\/[^"]*/, 'Fichier joint');
+                        filteredDetails = filteredDetails.replace(/.*\\[^"]*/, 'Fichier joint');
+                    }
+                    
+                    tableData.push([
+                        date,
+                        user,
+                        email,
+                        role,
+                        action,
+                        target,
+                        filteredDetails,
+                        ip
+                    ]);
+                }
+            });
+            
+            // En-têtes du tableau
+            const headers = [
+                'Date/Heure',
+                'Utilisateur',
+                'Email',
+                'Rôle',
+                'Action',
+                'Document/Utilisateur',
+                'Détails',
+                'IP'
+            ];
+            
+            // Générer le tableau PDF (position ajustée pour les logos)
+            doc.autoTable({
+                head: [headers],
+                body: tableData,
+                startY: 45, // Position ajustée pour laisser de l'espace aux logos
+                styles: {
+                    fontSize: 8,
+                    cellPadding: 2,
+                    overflow: 'linebreak',
+                    halign: 'left'
+                },
+                headStyles: {
+                    fillColor: [0, 123, 255],
+                    textColor: 255,
+                    fontStyle: 'bold'
+                },
+                columnStyles: {
+                    0: { cellWidth: 25 }, // Date/Heure
+                    1: { cellWidth: 30 }, // Utilisateur
+                    2: { cellWidth: 35 }, // Email
+                    3: { cellWidth: 20 }, // Rôle
+                    4: { cellWidth: 25 }, // Action
+                    5: { cellWidth: 30 }, // Document/Utilisateur
+                    6: { cellWidth: 40 }, // Détails
+                    7: { cellWidth: 20 }  // IP
+                },
+                margin: { left: 14, right: 14 }
+            });
+            
+            // Pied de page avec logos
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                
+                // Ligne de séparation en bas
+                doc.setLineWidth(0.3);
+                doc.line(14, doc.internal.pageSize.height - 15, doc.internal.pageSize.width - 14, doc.internal.pageSize.height - 15);
+                
+                // Pied de page
+                doc.setFontSize(8);
+                doc.text('Page ' + i + ' sur ' + pageCount, 14, doc.internal.pageSize.height - 8);
+                doc.text('© 2025 RPI-PAD Archiv\'Web', doc.internal.pageSize.width - 50, doc.internal.pageSize.height - 8);
+            }
+            
+            // Télécharger le PDF
+            const fileName = 'historique_actions_' + new Date().toISOString().split('T')[0] + '.pdf';
+            doc.save(fileName);
+        }
     }
     </script>
 

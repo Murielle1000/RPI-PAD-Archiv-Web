@@ -1,5 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+// Vérifier si la session n'est pas déjà démarrée
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 

@@ -46,12 +46,12 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">LOIS</h1>
-                        <div class="d-sm-flex align-items-center justify-content-space-between mb-4" >
-                            <a class="btn btn-sm btn-dark fw-bold" href="#modalAddDecret" data-toggle="modal" data-target="#modalAddDecret" style="margin-left: 0px">
-                                <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Ajouter
-                            </a>
-                        </div>
+                    <div class="d-sm-flex align-items-center justify-content-space-between mb-4">
+                        <a class="btn btn-sm btn-dark fw-bold" href="#modalAddLois" data-toggle="modal" data-target="#modalAddLois" style="margin-left: 0px">
+                            <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Ajouter
+                        </a>
+                    </div>
 
                     <?php
                         require_once("model/DocumentsRepository.php");

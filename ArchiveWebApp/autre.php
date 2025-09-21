@@ -46,12 +46,12 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">AUTRES DOCUMENTS</h1>
-                        <div class="d-sm-flex align-items-center justify-content-space-between mb-4" >
-                            <a class="btn btn-sm btn-dark fw-bold" href="#modalAddAutre" data-toggle="modal" data-target="#modalAddAutre" style="margin-left: 0px">
-                                <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Ajouter
-                            </a>
-                        </div>
+                    <div class="d-sm-flex align-items-center justify-content-space-between mb-4">
+                        <a class="btn btn-sm btn-dark fw-bold" href="#modalAddAutre" data-toggle="modal" data-target="#modalAddAutre" style="margin-left: 0px">
+                            <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Ajouter
+                        </a>
+                    </div>
 
                     <?php
                         require_once("model/DocumentsRepository.php");
@@ -67,7 +67,10 @@
 
                         // Récupération des autres documents (tous les types sauf les types prédéfinis)
                         $typesPredefinis = ['lois', 'décrets', 'arrêtés', 'ordonnance', 'note de service', 'décision', 'résolution', 'convention'];
-                        $autresDocuments = $repo->getByType('autre');
+                        $tousDocuments = $repo->getAll();
+                        $autresDocuments = array_filter($tousDocuments, function($doc) use ($typesPredefinis) {
+                            return !in_array($doc['type'], $typesPredefinis);
+                        });
 
                         // Recherche par titre
                         if ($search !== '') {

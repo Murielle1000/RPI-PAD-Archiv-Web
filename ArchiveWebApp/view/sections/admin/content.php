@@ -161,18 +161,18 @@
                             </div>
                         </div>
 
-                        <!-- Autres Documents Card -->
+                        <!-- Résolutions Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card stat-card-rpi border-left-secondary h-100 py-2 fade-in-up" style="animation-delay: 0.9s;">
+                            <div class="card stat-card-rpi border-left-accent-4 h-100 py-2 fade-in-up" style="animation-delay: 0.6s;">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="stat-label">
-                                                Autres</div>
-                                            <div class="stat-number"><?= $autres ?></div>
+                                                Résolutions</div>
+                                            <div class="stat-number"><?= $resolutions ?></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-folder-open fa-2x stat-icon secondary"></i>
+                                            <i class="fas fa-handshake fa-2x stat-icon accent-4"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -219,18 +219,18 @@
                             </div>
                         </div>
 
-                        <!-- Résolutions Card -->
+                        <!-- Autres Documents Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card stat-card-rpi border-left-accent-4 h-100 py-2 fade-in-up" style="animation-delay: 0.6s;">
+                            <div class="card stat-card-rpi border-left-secondary h-100 py-2 fade-in-up" style="animation-delay: 0.9s;">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="stat-label">
-                                                Résolutions</div>
-                                            <div class="stat-number"><?= $resolutions ?></div>
+                                                Autres</div>
+                                            <div class="stat-number"><?= $autres ?></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-handshake fa-2x stat-icon accent-4"></i>
+                                            <i class="fas fa-folder-open fa-2x stat-icon secondary"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -269,52 +269,52 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <a href="listeLois.php" class="btn btn-rpi-primary btn-block">
-                                                <i class="fas fa-gavel mr-2"></i>Gérer les Lois
+                                                <i class="fas fa-gavel mr-2"></i>Les Lois
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="listeDécrets.php" class="btn btn-success btn-block">
-                                                <i class="fas fa-scroll mr-2"></i>Gérer les Décrets
+                                                <i class="fas fa-scroll mr-2"></i>Les Décrets
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="listeArrétés.php" class="btn btn-info btn-block">
-                                                <i class="fas fa-file-signature mr-2"></i>Gérer les Arrêtés
+                                                <i class="fas fa-file-signature mr-2"></i>Les Arrêtés
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="listeOrdonnances.php" class="btn btn-warning btn-block">
-                                                <i class="fas fa-clipboard-list mr-2"></i>Gérer les Ordonnances
+                                                <i class="fas fa-clipboard-list mr-2"></i>Les Ordonnances
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="listeDécisions.php" class="btn btn-dark btn-block">
-                                                <i class="fas fa-balance-scale mr-2"></i>Gérer les Décisions
+                                                <i class="fas fa-balance-scale mr-2"></i>Les Décisions
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="listeNotes.php" class="btn btn-rpi-secondary btn-block">
-                                                <i class="fas fa-sticky-note mr-2"></i>Gérer les Notes
+                                                <i class="fas fa-sticky-note mr-2"></i>Les Notes
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="listeRésolutions.php" class="btn btn-danger btn-block">
-                                                <i class="fas fa-handshake mr-2"></i>Gérer les Résolutions
+                                                <i class="fas fa-handshake mr-2"></i>Les Résolutions
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="listeConventions.php" class="btn btn-dark btn-block">
-                                                <i class="fas fa-handshake mr-2"></i>Gérer les Conventions
+                                                <i class="fas fa-handshake mr-2"></i>Les Conventions
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="autre.php" class="btn btn-secondary btn-block">
-                                                <i class="fas fa-folder-open mr-2"></i>Gérer les Autres
+                                                <i class="fas fa-folder-open mr-2"></i>Les Autres documents
                                             </a>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <a href="utilisateurs.php" class="btn btn-rpi-primary btn-block">
-                                                <i class="fas fa-users mr-2"></i>Gérer les Utilisateurs
+                                                <i class="fas fa-users mr-2"></i>Utilisateurs
                                             </a>
                                         </div>
                                     </div>

@@ -66,7 +66,7 @@
                                         <a href="documentHistory.php?id=<?= $doc['id'] ?>" class="btn btn-sm btn-rpi-info" title="Historique des actions">
                                             <i class="fas fa-history"></i>
                                         </a>
-                                        <a href="controller/edit<?= ucfirst($documentType) ?>.php?id=<?= $doc['id'] ?>" class="btn btn-sm btn-rpi-secondary">
+                                        <a href="#" class="btn btn-sm btn-rpi-secondary" onclick="openEditModal(<?= $doc['id'] ?>, '<?= $documentType ?>')">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="controller/delete<?= ucfirst($documentType) ?>.php?id=<?= $doc['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer ce document ?');">
@@ -127,6 +127,10 @@
                 <a class="btn btn-dark fw-bold" href="#modalAddResolutions" data-toggle="modal" data-target="#modalAddResolutions">
                     <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i> Ajouter
                 </a>
+            <?php elseif ($documentType === 'autre'): ?>
+                <a class="btn btn-dark fw-bold" href="#modalAddAutre" data-toggle="modal" data-target="#modalAddAutre">
+                    <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i> Ajouter
+                </a>
             <?php elseif ($documentType === 'users'): ?>
                 <a class="btn btn-dark fw-bold" href="#modalAddUser" data-toggle="modal" data-target="#modalAddUser">
                     <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i> Ajouter un utilisateur
@@ -135,3 +139,191 @@
         </div>
     <?php endif; ?>
 </div>
+
+<!-- Modal d'édition -->
+<div class="modal fade" id="modalEditDocument" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modifier le Document</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <form id="formEditDocument" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="editDocumentId" name="id">
+                    
+                    <!-- Titre -->
+                    <div class="form-group">
+                        <label for="editDocTitle">Titre</label>
+                        <input type="text" class="form-control" id="editDocTitle" name="title" placeholder="Titre du document" required>
+                    </div>
+
+                    <!-- Type -->
+                    <div class="form-group">
+                        <label for="editDocType">Type</label>
+                        <select class="form-control" id="editDocType" name="type" required onchange="toggleCustomType()">
+                            <option value="lois">Lois</option>
+                            <option value="décrets">Décrets</option>
+                            <option value="arrêtés">Arrêtés</option>
+                            <option value="ordonnance">Ordonnance</option>
+                            <option value="note de service">Note de service</option>
+                            <option value="décision">Décision</option>
+                            <option value="résolution">Résolution</option>
+                            <option value="convention">Convention</option>
+                            <option value="autre">Autre (personnalisé)</option>
+                        </select>
+                    </div>
+
+                    <!-- Type personnalisé (visible seulement pour "autre") -->
+                    <div class="form-group" id="customTypeGroup" style="display: none;">
+                        <label for="editDocCustomType">Type personnalisé</label>
+                        <input type="text" class="form-control" id="editDocCustomType" name="custom_type" placeholder="Saisissez le type de document">
+                        <small class="form-text text-muted">Ex: Rapport, Manuel, Guide, Procédure, etc.</small>
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div class="form-group">
+                        <label for="editDocCategory">Catégorie</label>
+                        <select class="form-control" id="editDocCategory" name="categorie" required>
+                            <option value="--">--</option>
+                            <option value="présidentiel">Présidence</option>
+                            <option value="ministériel">Ministère</option>
+                            <option value="gouvernement">Gouvernement</option>
+                            <option value="Direction Générale">Direction Générale</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="editDocDescription">Description</label>
+                        <textarea class="form-control" id="editDocDescription" name="description" rows="3" placeholder="Description du document"></textarea>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary" type="submit">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openEditModal(documentId, documentType) {
+    // Récupérer les données du document via AJAX
+    fetch(`controller/edit${capitalizeFirst(documentType)}.php?id=${documentId}&ajax=1`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert('Erreur: ' + data.error);
+                return;
+            }
+            
+            // Remplir le formulaire avec les données
+            document.getElementById('editDocumentId').value = data.id;
+            document.getElementById('editDocTitle').value = data.titre;
+            document.getElementById('editDocCategory').value = data.categorie;
+            document.getElementById('editDocDescription').value = data.description;
+            
+            // Gérer le type selon le type de document
+            // Vérifier si c'est un type prédéfini ou un type personnalisé
+            const predefinedTypes = ['lois', 'décrets', 'arrêtés', 'ordonnance', 'note de service', 'décision', 'résolution', 'convention'];
+            if (predefinedTypes.includes(data.type)) {
+                document.getElementById('editDocType').value = data.type;
+                document.getElementById('editDocCustomType').value = '';
+            } else {
+                // C'est un type personnalisé (document "autre")
+                document.getElementById('editDocType').value = 'autre';
+                document.getElementById('editDocCustomType').value = data.type;
+            }
+            toggleCustomType();
+            
+            // Configurer l'action du formulaire
+            document.getElementById('formEditDocument').action = `controller/edit${capitalizeFirst(documentType)}.php`;
+            
+            // Ouvrir la modale
+            $('#modalEditDocument').modal('show');
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('Erreur lors du chargement des données du document');
+        });
+}
+
+function capitalizeFirst(str) {
+    // Gérer les cas spéciaux pour les noms de contrôleurs
+    const specialCases = {
+        'ordonnances': 'Ordonnance',
+        'décrets': 'Décrets',
+        'arrêtés': 'Arrétés',
+        'décisions': 'Décisions',
+        'résolutions': 'Résolutions',
+        'conventions': 'Conventions',
+        'notes': 'Notes',
+        'lois': 'Lois',
+        'autre': 'Autre'
+    };
+    
+    if (specialCases[str]) {
+        return specialCases[str];
+    }
+    
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function toggleCustomType() {
+    const typeSelect = document.getElementById('editDocType');
+    const customTypeGroup = document.getElementById('customTypeGroup');
+    const customTypeInput = document.getElementById('editDocCustomType');
+    
+    if (typeSelect.value === 'autre') {
+        customTypeGroup.style.display = 'block';
+        customTypeInput.required = true;
+    } else {
+        customTypeGroup.style.display = 'none';
+        customTypeInput.required = false;
+        customTypeInput.value = '';
+    }
+}
+
+// Gérer la soumission du formulaire d'édition
+document.getElementById('formEditDocument').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const action = this.action;
+    
+    // Si c'est un type personnalisé, utiliser la valeur du champ personnalisé
+    const typeSelect = document.getElementById('editDocType');
+    if (typeSelect.value === 'autre') {
+        const customType = document.getElementById('editDocCustomType').value;
+        if (customType) {
+            formData.set('type', customType);
+        }
+    }
+    
+    fetch(action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            // Fermer la modale
+            $('#modalEditDocument').modal('hide');
+            // Recharger la page pour voir les modifications
+            location.reload();
+        } else {
+            alert('Erreur lors de la modification du document');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('Erreur lors de la modification du document');
+    });
+});
+</script>

@@ -35,7 +35,7 @@
 
                         <!-- Page Heading -->
                         <h1 class="h3 mb-2 text-gray-800">NOTES DE SERVICE</h1>
-                        <div class="d-sm-flex align-items-center justify-content-space-between mb-4" >
+                        <div class="d-sm-flex align-items-center justify-content-space-between mb-4">
                             <a class="btn btn-sm btn-dark fw-bold" href="#modalAddNote" data-toggle="modal" data-target="#modalAddNote" style="margin-left: 0px">
                                 <i class="fas fa-fw fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Ajouter
@@ -117,93 +117,14 @@
 
 
 
-                        <div class="card shadow mb-4" style="border: none; background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%); color: #fff;">
-                            <div class="card-header py-3" style="background: #1e3a8a;">
-                                <h6 class="m-0 font-weight-bold" style="color: #fff;">Liste des Notes de Service</h6>
-                                <form method="get" class="form-inline mt-2" id="filterForm">
-                                    <div class="input-group mr-2">
-                                        <input type="text" name="search" class="form-control" style="background: #eff6ff; color: #1e3a8a; border: none;" placeholder="Rechercher par titre..." value="<?= htmlspecialchars($search) ?>">
-                                        <div class="input-group-append">
-                                            <button type="submit" class="btn btn-light">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <select name="categorie" class="form-control mr-2" style="background: #3b82f6; color: #fff; border: none;" onchange="document.getElementById('filterForm').submit();">
-                                        <option value="">Toutes les catégories</option>
-                                        <option value="présidentiel" <?= $categorieFilter=='présidentiel'?'selected':''; ?>>Présidence</option>
-                                        <option value="ministériel" <?= $categorieFilter=='ministériel'?'selected':''; ?>>Ministère</option>
-                                        <option value="direction générale" <?= $categorieFilter=='direction générale'?'selected':''; ?>>Direction Générale</option>
-                                        <option value="gouvernement" <?= $categorieFilter=='gouvernement'?'selected':''; ?>>Gouvernement</option>
-                                    </select>
-                                    <select name="alpha_order" class="form-control mr-2" style="background: #3b82f6; color: #fff; border: none;" onchange="document.getElementById('filterForm').submit();">
-                                        <option value="">Ordre alphabétique</option>
-                                        <option value="asc" <?= $alphaOrder=='asc'?'selected':''; ?>>A → Z</option>
-                                        <option value="desc" <?= $alphaOrder=='desc'?'selected':''; ?>>Z → A</option>
-                                    </select>
-                                    <select name="date_order" class="form-control mr-2" style="background: #3b82f6; color: #fff; border: none;" onchange="document.getElementById('filterForm').submit();">
-                                        <option value="desc" <?= $dateOrder=='desc'?'selected':''; ?>>Plus récentes</option>
-                                        <option value="asc" <?= $dateOrder=='asc'?'selected':''; ?>>Plus anciennes</option>
-                                    </select>
-                                </form>
-                            </div>
-                            <div class="card-body" style="background: #2563eb;">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" style="background: #eff6ff; color: #1e3a8a;">
-                                        <thead style="background: #3b82f6; color: #fff;">
-                                            <tr>
-                                                <th>Titre</th>
-                                                <th>Type</th>
-                                                <th>Catégorie</th>
-                                                <th>Description</th>
-                                                <th>Date d'ajout</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php if (count($notes) > 0): ?>
-                                                <?php foreach ($notes as $note): ?>
-                                                    <tr>
-                                                        <td><?= htmlspecialchars($note['titre']) ?></td>
-                                                        <td><?= htmlspecialchars($note['type']) ?></td>
-                                                        <td><?= htmlspecialchars($note['categorie']) ?></td>
-                                                        <td><?= htmlspecialchars($note['description']) ?></td>
-                                                        <td><?= date('d/m/Y H:i', strtotime($note['add_date'])) ?></td>
-                                                        <td>
-                                                            <?php if (!empty($note['url_fichier'])): ?>
-                                                                <a href="controller/openDocument.php?id=<?= $note['id'] ?>" target="_blank" class="btn btn-sm btn-info"><i class="fas fa-folder-open"></i></a>
-                                                            <?php else: ?>
-                                                                <span class="text-muted">Fichier non disponible</span>
-                                                            <?php endif; ?>
-                                                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                                                                <a href="documentHistory.php?id=<?= $note['id'] ?>" class="btn btn-sm btn-info" title="Historique des actions"><i class="fas fa-history"></i></a>
-                                                                <a href="controller/editNotes.php?id=<?= $note['id'] ?>" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                                                <a href="controller/deleteNotes.php?id=<?= $note['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer ce document ?');"><i class="fas fa-trash"></i></a>
-                                                            <?php endif; ?>
-                                                        </td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            <?php else: ?>
-                                                <tr>
-                                                    <td colspan="6" class="text-center">Aucune note de service trouvée.</td>
-                                                </tr>
-                                            <?php endif; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- Pagination -->
-                                <nav>
-                                    <ul class="pagination justify-content-center">
-                                        <?php for ($i = 1; $i <= $pages; $i++): ?>
-                                            <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                                                <a class="page-link" style="color: #2563eb;" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
-                                            </li>
-                                        <?php endfor; ?>
-                                    </ul>
-                                </nav>
-                            </div>
-                            
-                        </div>
+                    <?php
+                    // Variables pour le template
+                    $pageTitle = "Liste des Notes de Service";
+                    $documentType = "notes";
+                    $documents = $notes;
+                    $currentPage = $page;
+                    include "view/sections/admin/document-card-template.php";
+                    ?>
 
                     </div>
                     <!-- /.container-fluid -->

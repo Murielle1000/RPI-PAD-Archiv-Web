@@ -45,6 +45,21 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
+        
+        /* Masquer la scrollbar pour tous les navigateurs */
+        * {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* Internet Explorer 10+ */
+        }
+        
+        *::-webkit-scrollbar {
+            display: none; /* WebKit */
+        }
+        
+        /* Alternative pour maintenir la fonctionnalité de scroll */
+        body, html {
+            overflow-x: hidden;
+        }
     </style>
 </head>
 <body class="bg-gray-50">

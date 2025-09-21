@@ -91,6 +91,30 @@
             padding: 0 1rem;
             margin-top: 1rem;
         }
+        
+        /* Masquer la scrollbar pour tous les navigateurs */
+        * {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* Internet Explorer 10+ */
+        }
+        
+        *::-webkit-scrollbar {
+            display: none; /* WebKit */
+        }
+        
+        /* Alternative pour maintenir la fonctionnalité de scroll */
+        body, html {
+            overflow-x: hidden;
+        }
+        
+        .sidebar {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* Internet Explorer 10+ */
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            display: none; /* WebKit */
+        }
     </style>
 
 </head>
